@@ -8,11 +8,17 @@ types of events that you specify with `--type`:
 * home_game:  This will create locker room monitors, a penalty box,
   a scorekeeper, and a clock/scoreboard item.
 * away_game:  This will create two locker room monitors and a penalty
-  box item,
+  box item.
+* home_tournament_game:  Creates a welcome table, scorekeeper,
+  clock/scoreboard, two locker room monitors, and a penalty box
+  for tournament games where we are playing.
+* home_tournament_otherteams:  Creates a welcome table, scorekeeper,
+  clock/scoreboard for tournament games where our team isn't
+  playing.
 
 You need to supply a start date/time in this format:
 ```
-%m/%d/%Y %I:%M %p
+01/22/2026 03:30 pm
 ```
 and a category needs to be specified too, like `18U` or `10U`.
 
