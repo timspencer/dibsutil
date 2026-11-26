@@ -202,8 +202,11 @@ EVENTS = {
 
 types = list(EVENTS.keys())
 
+# create a date/time string from the start date and
+# whatever offset (in minutes) is specified.
+# This is the format it uses:
+# 01/22/2027 06:25 PM
 def calculate_time(start_date, minute_offset):
-    # 01/22/2027 06:25 PM
     parsed_time = datetime.strptime(start_date, "%m/%d/%Y %I:%M %p")
     newtime = parsed_time + timedelta(minutes=minute_offset)
     return newtime.strftime("%D %I:%M:%S %p")
@@ -234,26 +237,35 @@ def main():
         writer = csv.DictWriter(f, fieldnames=HEADERS)
         if not file_exists:
             writer.writeheader()
+
+        # process all the entries that might have come in via commandline.
         rows = []
         for i in EVENTS[args.type]:
             i["name"] = args.category + " " + i["name"]
             if args.prefix != "":
                 i["name"] = args.prefix + " " + i["name"]
+
             i["start_date_time"] = calculate_time(args.start_date_time, i["start_date_time"])
+
             i["end_date_time"] = calculate_time(args.start_date_time, i["end_date_time"])
+
             i["category"] = args.category
+
             if args.location != "":
                 i["location"] = args.location
+
             if args.locationurl != "":
                 i["location_url"] = args.locationurl
+
             if args.all_day_event != "FALSE":
                 i["all_day_event"] = args.all_day_event
+
+            # get rid of count, then add in how many count specifies
             count = i.pop("count", None)
             for z in range(count):
                 rows.append(i)
+
         writer.writerows(rows)
-        
-    # print(f"Added '{args.name}' ({args.category}) to {args.output}")
 
 if __name__ == "__main__":
     main()
