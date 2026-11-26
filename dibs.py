@@ -54,7 +54,7 @@ EVENTS = {
         {
             "count": 1,
             "name": "Home Tournament Welcome Table",
-            "description": "",
+            "description": "Be friendly, help people!",
             "location": "Palouse Ice Rink",
             "location_url": "",
             "start_date": -30,
@@ -128,7 +128,7 @@ EVENTS = {
         {
             "count": 1,
             "name": "Home Tournament Welcome Table",
-            "description": "",
+            "description": "Be friendly, help people!",
             "location": "Palouse Ice Rink",
             "location_url": "",
             "start_date": -30,
