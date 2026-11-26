@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 import csv
@@ -6,8 +6,8 @@ import os
 from datetime import datetime, timedelta
 
 HEADERS = [
-    "name", "description", "location", "location_url", "start_date_time",
-    "end_date_time", "credit_value", "cancel_window", "all_day_event",
+    "name", "description", "location", "location_url", "start_date",
+    "end_date", "credit_value", "cancel_window", "all_day_event",
     "category", "fulfiller_phone_required", "fulfiller_email_required",
     "status", "athlete_name", "athlete_email", "fulfiller_name",
     "fulfiller_phone", "fulfiller_email", "cancel_requested",
@@ -31,14 +31,14 @@ EVENTS = {
             "description": "SafeSport and background check required to fulfill this position. 45 min before and 30 min after.",
             "location": "Palouse Ice Rink",
             "location_url": "",
-            "start_date_time": -45,
-            "end_date_time": 90,
+            "start_date": -45,
+            "end_date": 90,
             "credit_value": 1.25,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -57,14 +57,14 @@ EVENTS = {
             "description": "SafeSport and background check required to fulfill this position. 45 min before and 30 min after.",
             "location": "Palouse Ice Rink",
             "location_url": "",
-            "start_date_time": -45,
-            "end_date_time": 90,
+            "start_date": -45,
+            "end_date": 90,
             "credit_value": 1.25,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -81,14 +81,14 @@ EVENTS = {
             "description": "SafeSport and background check required to fulfill this position.",
             "location": "Palouse Ice Rink",
             "location_url": "",
-            "start_date_time": 0,
-            "end_date_time": 60,
+            "start_date": 0,
+            "end_date": 60,
             "credit_value": 1,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -105,14 +105,14 @@ EVENTS = {
             "description": "Must be able to write legibly.",
             "location": "Palouse Ice Rink",
             "location_url": "",
-            "start_date_time": 0,
-            "end_date_time": 60,
+            "start_date": 0,
+            "end_date": 60,
             "credit_value": 1,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -129,14 +129,14 @@ EVENTS = {
             "description": "",
             "location": "Palouse Ice Rink",
             "location_url": "",
-            "start_date_time": 0,
-            "end_date_time": 60,
+            "start_date": 0,
+            "end_date": 60,
             "credit_value": 1,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -155,14 +155,14 @@ EVENTS = {
             "description": "SafeSport and background check required to fulfill this position. 45 min before and 30 min after.",
             "location": "",
             "location_url": "",
-            "start_date_time": -45,
-            "end_date_time": 90,
+            "start_date": -45,
+            "end_date": 90,
             "credit_value": 1.25,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -179,14 +179,14 @@ EVENTS = {
             "description": "SafeSport and background check required to fulfill this position.",
             "location": "",
             "location_url": "",
-            "start_date_time": 0,
-            "end_date_time": 60,
+            "start_date": 0,
+            "end_date": 60,
             "credit_value": 1,
             "cancel_window": 1,
             "all_day_event": "FALSE",
             "category": "",
-            "fulfiller_phone_required": "TRUE",
-            "fulfiller_email_required": "TRUE",
+            "fulfiller_phone_required": 1,
+            "fulfiller_email_required": 1,
             "status": "",
             "athlete_name": "",
             "athlete_email": "",
@@ -209,7 +209,7 @@ types = list(EVENTS.keys())
 def calculate_time(start_date, minute_offset):
     parsed_time = datetime.strptime(start_date, "%m/%d/%Y %I:%M %p")
     newtime = parsed_time + timedelta(minutes=minute_offset)
-    return newtime.strftime("%D %I:%M:%S %p")
+    return newtime.strftime("%D %H:%M:%S")
 
 def main():
     parser = argparse.ArgumentParser(description="Add an event row to an events CSV file.")
@@ -219,7 +219,7 @@ def main():
     
     # Core event details (Required)
     parser.add_argument("--type", required=True, help="Type of the event:  " + ", ".join(types))
-    parser.add_argument("--start", required=True, dest="start_date_time", help="Start date/time (e.g., 2026-12-01T09:00:00)")
+    parser.add_argument("--start", required=True, dest="start_date", help="Start date/time (e.g., 2026-12-01T09:00:00)")
     parser.add_argument("--category", required=True, help="Event category/type")
     
     # Optional event details with sensible defaults
@@ -245,9 +245,9 @@ def main():
             if args.prefix != "":
                 i["name"] = args.prefix + " " + i["name"]
 
-            i["start_date_time"] = calculate_time(args.start_date_time, i["start_date_time"])
+            i["start_date"] = calculate_time(args.start_date, i["start_date"])
 
-            i["end_date_time"] = calculate_time(args.start_date_time, i["end_date_time"])
+            i["end_date"] = calculate_time(args.start_date, i["end_date"])
 
             i["category"] = args.category
 
@@ -258,7 +258,9 @@ def main():
                 i["location_url"] = args.locationurl
 
             if args.all_day_event != "FALSE":
-                i["all_day_event"] = args.all_day_event
+                i["all_day_event"] = 1
+            else:
+                i["all_day_event"] = 0
 
             # get rid of count, then add in how many count specifies
             count = i.pop("count", None)
