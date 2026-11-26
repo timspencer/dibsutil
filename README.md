@@ -45,6 +45,6 @@ You can specify a different filename by using `-o`.  So something like
 ./dibs.py --type practice --start "01/23/2027 05:25 PM" --category 10U
 ./dibs.py --type away_game --start "01/24/2027 04:25 PM" --category 14U --prefix Testing
 ./dibs.py --type away_game --start "01/25/2027 03:25 PM" --category 14U --prefix Testing -o myfile.csv
-./dibs.py --type away_game --start "01/25/2027 03:25 PM" --category 14U --prefix Testing --allday
+./dibs.py --type away_game --start "01/25/2027 03:25 PM" --category 14U --prefix Testing --allday TRUE
 ```
 
